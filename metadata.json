@@ -1,0 +1,5 @@
+
+{
+  "name": "SavorIt - Modern Food Ordering Platform",
+  "description": "A high-performance, mobile-first food ordering application featuring dynamic menu filtering, persistent cart management, and a streamlined checkout process. Built with React, Tailwind CSS, and integrated with a mock backend logic ready for MongoDB."
+}
