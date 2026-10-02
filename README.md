@@ -2,7 +2,7 @@
 
 <img src="./public/logo.png" alt="BiteFlow Logo" width="130" style="border-radius: 24px; box-shadow: 0 8px 32px rgba(232, 66, 14, 0.35);" />
 
-# BiteFlow — Modern Hyperlocal Food Delivery Platform
+# BiteFlow — Food Delivery Platform
 ### Enterprise Multi-Role Food Delivery Ecosystem with Live Socket.IO Tracking, Smart Surplus Rescue, and SQLite WAL
 
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](#)
