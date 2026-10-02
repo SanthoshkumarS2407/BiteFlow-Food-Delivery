@@ -2,318 +2,403 @@
 
 <img src="./public/logo.png" alt="BiteFlow Logo" width="130" style="border-radius: 24px; box-shadow: 0 8px 32px rgba(232, 66, 14, 0.35);" />
 
-# BiteFlow — Real-World Multi-Role Food Delivery Platform
-### Enterprise Hyperlocal Platform with Role-Based Access Control (RBAC), Live Socket.IO Tracking & High-Performance SQLite WAL
+# BiteFlow — Modern Hyperlocal Food Delivery Platform
+### Enterprise Multi-Role Food Delivery Ecosystem with Live Socket.IO Tracking, Smart Surplus Rescue, and SQLite WAL
 
-[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=nodedotjs&logoColor=white)](#)
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](#)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](#)
-[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](#)
-[![Socket.IO](https://img.shields.io/badge/Socket.IO-v4-010101?logo=socketdotio&logoColor=white)](#)
-[![SQLite WAL](https://img.shields.io/badge/SQLite-WAL%20Mode-003B57?logo=sqlite&logoColor=white)](#)
-[![Security](https://img.shields.io/badge/Auth-JWT%20%2B%20RBAC-green)](#)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](#)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](#)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)](#)
+[![Socket.IO](https://img.shields.io/badge/Socket.IO-v4-010101?style=for-the-badge&logo=socketdotio&logoColor=white)](#)
+[![SQLite WAL](https://img.shields.io/badge/SQLite-WAL%20Mode-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](#)
+[![License](https://img.shields.io/badge/License-MIT-orange?style=for-the-badge)](#)
 
 <p align="center">
-  A complete, production-grade Indian food delivery ecosystem engineered to mirror industry leaders <b>Swiggy</b> and <b>Zomato</b> with four strictly enforced user roles, end-to-end order dispatching, live GPS route tracking, Indian UPI payment stack, and restaurant ownership validation.
+  A production-grade hyperlocal food delivery platform inspired by <b>Swiggy</b> and <b>Zomato</b>, featuring <b>4 strictly enforced RBAC roles</b>, real-time bidirectional order dispatching, live GPS waypoint delivery tracking, Indian UPI payment stack, and <b>groundbreaking green innovations</b> for surplus food rescue and group delivery.
 </p>
 
-[Quick Start](#-quick-start) • [The 4 User Roles](#-the-4-user-roles) • [Demo Credentials](#-demo-accounts--one-click-logins) • [Order Lifecycle Flow](#-complete-order-lifecycle) • [Security & Authorization](#-security--role-based-authorization) • [API Reference](#-api-endpoints)
+[Quick Start](#-quick-start) • [Interactive Flowcharts](#-system-architecture--flowcharts) • [The 4 User Roles](#-the-4-user-roles--demo-credentials) • [Implemented Innovations](#-implemented-innovations-deep-dive) • [API Reference](#-api-endpoints-reference)
 
 ---
 
 </div>
 
-## 🌟 Architecture & Core Capabilities
+## 📊 System Architecture & Flowcharts
 
-BiteFlow is built as a real-world multi-role food delivery platform with zero AI placeholders or non-functional screens:
+### 1. High-Level Ecosystem Architecture
+```mermaid
+graph TD
+    subgraph Clients["🌐 Multi-Role Frontend (React 19 + TypeScript + Vite)"]
+        Customer["👤 Customer App<br/>(Browse, Order, Track)"]
+        Owner["🍽️ Restaurant Portal<br/>(Menu, Kitchen Queue)"]
+        Courier["🛵 Delivery Fleet App<br/>(Waypoints, Wallet)"]
+        Admin["🛡️ Super Admin Hub<br/>(Catalog, Approvals, KPIs)"]
+    end
 
-```text
-                                     ┌───────────────┐
-                                     │   CUSTOMER    │
-                                     │  (Browse/Pay) │
-                                     └───────┬───────┘
-                                             │ Places Order
-                                             ▼
-┌──────────────┐    Approves         ┌───────────────┐   Prepares Food   ┌────────────────────┐
-│    ADMIN     │ ──────────────────> │  RESTAURANT   │ ────────────────> │  DELIVERY PARTNER  │
-│ (Supervises) │     Restaurant      │  (Accept/Cook)│    Ready Pickup   │ (Pickup & Deliver) │
-└──────────────┘                     └───────────────┘                   └─────────┬──────────┘
-       ▲                                                                           │
-       │                                                                           ▼
-       └──────────────────────── Order Completed & Reviewed ◄──────────────────────┘
+    subgraph Server["⚡ Node.js & Express Hyperlocal Backend"]
+        AuthMiddleware["🔐 JWT & RBAC Middleware"]
+        REST["📡 REST API Controllers"]
+        SocketServer["🔄 Socket.IO Live Dispatcher<br/>(order_, user_, role_ rooms)"]
+        RescueEngine["♻️ Smart Surplus Engine<br/>(Demand Prediction & Expiry)"]
+        GroupRouter["🚚 Group Delivery Engine<br/>(Batching & Privacy Anonymization)"]
+    end
+
+    subgraph Data["💾 High-Performance Storage (SQLite WAL Mode)"]
+        DB[(database.db<br/>Normalized Relational Schema)]
+    end
+
+    Customer -->|HTTP / JSON| AuthMiddleware
+    Owner -->|HTTP / JSON| AuthMiddleware
+    Courier -->|HTTP / JSON| AuthMiddleware
+    Admin -->|HTTP / JSON| AuthMiddleware
+
+    AuthMiddleware --> REST
+    REST --> RescueEngine
+    REST --> GroupRouter
+    REST --> DB
+
+    Customer <-->|WebSocket Events| SocketServer
+    Owner <-->|WebSocket Events| SocketServer
+    Courier <-->|WebSocket Events| SocketServer
+    Admin <-->|WebSocket Events| SocketServer
+    SocketServer <--> DB
 ```
-
-1. **4 Distinct User Roles**:
-   - `CUSTOMER`: Browse restaurants, search dishes, smart combos, health-aware filters, place orders, track live on map, reorder, rate & review.
-   - `RESTAURANT_OWNER`: Dedicated owner portal (`/owner-dashboard`), restaurant onboarding (`PENDING_APPROVAL`), categories manager, full nutritional menu editor, kitchen open/close toggle, and live incoming order queue (Accept / Reject with reason / Prepare / Mark Ready).
-   - `DELIVERY_PARTNER`: Dedicated courier portal (`/delivery-dashboard`), Online/Offline toggle, available orders queue, trip route map, step-by-step waypoint progression, wallet earnings (₹45/trip), and delivery history.
-   - `ADMIN`: Platform operations hub (`/admin`), real-time KPI metrics, 1-click restaurant approvals, user account suspension controls, global catalog supervision.
-
-2. **Real-Time Live Event Dispatcher**:
-   - Built on **Socket.IO** rooms (`order_{id}`, `user_{id}`, `restaurant_{id}`, `role_{ROLE}`) with automatic 3-second polling fallback.
-   - Instant bi-directional state synchronization when an owner accepts/prepares or a rider progresses along route waypoints.
-
-3. **High-Performance SQLite WAL**:
-   - Tuned with `PRAGMA journal_mode = WAL`, `PRAGMA synchronous = NORMAL`, and `PRAGMA cache_size = -64000` (64MB RAM cache) for sub-millisecond query responses.
-   - Complete normalized relational schema with foreign key constraints, indexes, and full audit trail history.
 
 ---
 
-## 🔐 Demo Accounts & One-Click Logins
+### 2. Complete Order Lifecycle & Real-Time State Machine
+```mermaid
+sequenceDiagram
+    autonumber
+    actor C as 👤 Customer
+    actor R as 🍽️ Restaurant Owner
+    actor D as 🛵 Delivery Partner
+    participant S as ⚡ BiteFlow Server
+    participant W as 🔄 Socket.IO Dispatcher
 
-The application is pre-seeded with verified test accounts across all 4 roles. You can sign in using credentials or click the **1-Click Demo Buttons** on the Sign In page:
+    C->>S: Places Order (UPI / Card / COD)
+    S-->>W: Broadcasts 'order_status_update' (PLACED)
+    W-->>R: Sound & Visual Alert in Kitchen Queue
+    
+    alt Order Accepted
+        R->>S: Accept Order
+        S-->>W: Broadcasts 'CONFIRMED'
+        W-->>C: Customer Tracker: Kitchen Confirmed Order
+        
+        R->>S: Start Preparing
+        S-->>W: Broadcasts 'PREPARING'
+        
+        R->>S: Mark Ready for Pickup
+        S-->>W: Broadcasts 'READY_FOR_PICKUP'
+        W-->>D: Pops in Delivery Partner Available Pool
+        
+        D->>S: Accept Delivery
+        S-->>W: Broadcasts 'DELIVERY_ASSIGNED'
+        
+        D->>S: Heading to Restaurant
+        S-->>W: Status -> 'GOING_TO_RESTAURANT'
+        
+        D->>S: Arrived at Restaurant
+        S-->>W: Status -> 'ARRIVED_AT_RESTAURANT'
+        
+        D->>S: Picked Up Package
+        S-->>W: Status -> 'FOOD_PICKED_UP'
+        
+        D->>S: Out for Delivery (GPS Route Live)
+        S-->>W: Status -> 'OUT_FOR_DELIVERY'
+        
+        D->>S: Arrived at Customer Doorstep
+        S-->>W: Status -> 'ARRIVED_AT_CUSTOMER'
+        
+        D->>S: Mark Delivered
+        S-->>W: Status -> 'DELIVERED'
+        S->>D: Credits Rider Wallet (+₹45)
+        S->>C: Unlocks Rating & 5-Star Review Form
+    else Order Rejected
+        R->>S: Reject Order (with reason)
+        S-->>W: Broadcasts 'CANCELLED_BY_RESTAURANT'
+        W-->>C: Instant notification & refund trigger
+    end
+```
 
-| Role | Email | Password | Primary Dashboard | Key Permissions |
+---
+
+### 3. Smart Surplus Rescue Architecture
+```mermaid
+flowchart LR
+    A[Kitchen Shift Preparation] --> B[Transparent Surplus Prediction Model]
+    B --> C{Anticipated Surplus Meals?}
+    C -- Yes --> D[Auto-Generate Rescue Listing<br/>40% - 55% Off]
+    C -- No --> E[Standard Menu Display]
+    D --> F[Published to Rescue Hub<br/>with Active Countdown]
+    F --> G[Customer Claims Rescue Meal]
+    G --> H[Meal Diverted from Waste 🌱]
+    H --> I[Eco Impact Metrics Updated]
+```
+
+---
+
+### 4. Neighbourhood Group Delivery & Privacy Route Batching
+```mermaid
+flowchart TD
+    A[Customer Initiates Checkout] --> B{Nearby Active Group Order Available?}
+    B -- Yes --> C[Join Delivery Group<br/>₹0 Delivery Fee Guaranteed]
+    B -- No --> D[Create New 30-min Window Group]
+    C --> E[Sequential Multi-Stop Routing]
+    D --> E
+    E --> F[Privacy Protection Shield]
+    F --> G[Neighbour names & full addresses masked<br/>'Nearby Neighbour · Stop 1']
+    G --> H[Single Courier Collects All Orders]
+    H --> I[Combined Trip Minimizes City CO2 Emissions 🛵]
+```
+
+---
+
+### 5. Multi-Restaurant Food Assignment Flow (Max 10 Restaurants)
+```mermaid
+flowchart TD
+    A[Super Admin Dashboard] --> B[Food Catalog Management]
+    B --> C[Create or Assign Dish]
+    C --> D[Select Target Restaurants from Grid]
+    D --> E{Selection Count <= 10?}
+    E -- More than 10 --> F[Blocked: Hard Limit of Max 10 Enforced]
+    E -- 1 to 10 --> G[Server slices array to max 10]
+    G --> H[Dish distributed across up to 10 partner kitchens]
+    H --> I[Verified in Catalog with Solid Black Font Indicator]
+```
+
+---
+
+## 🔐 The 4 User Roles & Demo Credentials
+
+BiteFlow provides pre-configured verified credentials for every role, plus **1-Click Quick Login** buttons on the login portal:
+
+| Role | Email | Password | Primary Portal | Key Capabilities |
 | :--- | :--- | :--- | :--- | :--- |
-| **🛡️ Super Admin** | `admin@biteflow.com` | `admin123` | `/admin` | Platform KPIs, restaurant approvals, user suspension, global catalog |
-| **🍽️ Restaurant Owner** | `owner@biteflow.com` | `owner123` | `/owner-dashboard` | Own restaurant menu, categories, nutrition facts, order acceptance & prep |
-| **🛵 Delivery Partner** | `delivery@biteflow.com` | `delivery123` | `/delivery-dashboard` | Accept deliveries, route waypoints, live tracking, wallet earnings |
-| **👤 Customer** | `user@biteflow.com` | `user123` | `/` | Food ordering, address book, UPI/Card/COD payments, live order tracking |
-| **🛡️ Admin (Backup)** | `admin@savorit.com` | `admin123` | `/admin` | Secondary super administrator account |
+| **🛡️ Super Admin** | `admin@biteflow.com` | `admin123` | `/admin` | Platform KPIs, restaurant approvals, user suspensions, multi-restaurant food assignment (max 10), surplus analytics |
+| **🍽️ Restaurant Owner** | `owner@biteflow.com` | `owner123` | `/owner-dashboard` | Own restaurant menu, nutritional facts editor, kitchen open/close toggle, real-time incoming order queue |
+| **🛵 Delivery Partner** | `delivery@biteflow.com` | `delivery123` | `/delivery-dashboard` | Online/Offline toggle, available orders pool, trip GPS waypoint progression, wallet earnings (₹45/trip) |
+| **👤 Customer** | `user@biteflow.com` | `user123` | `/` | Swiggy/Zomato style food browsing, 10+ restaurant categories, surplus rescue, ₹0 group delivery, live map tracking |
+| **🛡️ Admin (Backup)** | `admin@savorit.com` | `admin123` | `/admin` | Secondary administrative account |
 
 ---
 
-## 🔄 Complete Order Lifecycle
+## 🚀 Implemented Innovations Deep Dive
 
-Every stage is validated, recorded in `orders` and `order_status_history`, and broadcasted in real time:
+BiteFlow integrates 4 industry-first environmental and operational innovations directly into the platform navigation under **Implemented Innovations**:
 
-```text
-[CUSTOMER]
-   │  1. Add to Cart / Order Now
-   │  2. Select Delivery Address (Home / Work / Other)
-   │  3. Pay via UPI (GPay/PhonePe/Paytm), Card, or COD
-   ▼
-[STATUS: PLACED]
-   │
-   ▼
-[RESTAURANT OWNER]
-   │  Receives sound & visual alert in Owner Dashboard
-   ├── [Reject Order with reason] ──> [STATUS: CANCELLED_BY_RESTAURANT]
-   └── [Accept Order]
-        │
-        ▼
-   [STATUS: CONFIRMED]
-        │  Owner clicks "Start Preparing"
-        ▼
-   [STATUS: PREPARING]
-        │  Kitchen prepares food, owner packs and clicks "Mark Ready for Pickup"
-        ▼
-   [STATUS: READY_FOR_PICKUP]
-        │
-        ▼
-[DELIVERY PARTNER]
-   │  Order appears in "Available Deliveries" tab
-   │  Partner clicks "Accept Delivery"
-   ▼
-[STATUS: DELIVERY_ASSIGNED]
-   │  Trip waypoint progression:
-   ├── "Heading to Restaurant" ─────────> [STATUS: GOING_TO_RESTAURANT]
-   ├── "Arrived at Restaurant" ─────────> [STATUS: ARRIVED_AT_RESTAURANT]
-   ├── "Picked Up Package" ────────────> [STATUS: FOOD_PICKED_UP]
-   ├── "Out for Delivery" ─────────────> [STATUS: OUT_FOR_DELIVERY]
-   ├── "Arrived at Customer" ──────────> [STATUS: ARRIVED_AT_CUSTOMER]
-   └── "Mark Delivered" ───────────────> [STATUS: DELIVERED]
-                                                │
-                                                ├── Rider Wallet credited +₹45
-                                                └── Customer unlocks Rating & Review
-```
+### ♻️ 1. Smart Surplus Rescue
+- **Problem**: Commercial restaurant kitchens prepare fresh dishes every shift and discard unpurchased meals at service close.
+- **Solution**: Dynamic discounted rescue listings (**up to 50% off**) with rolling expiry timers.
+- **Verified Coverage**: Customers can claim authentic surplus dishes directly into their cart while preventing kitchen waste.
+
+### 🚚 2. Neighbourhood Group Delivery
+- **Problem**: Multiple customers in the same apartment block or street pay separate delivery fees and cause multiple solitary motorbike trips.
+- **Solution**: Batches nearby orders within a 30-minute window, granting **₹0 delivery fees** to all participants.
+- **Privacy Protection**: Anonymizes other customers' full names, phone numbers, and exact addresses (*"Nearby Neighbour · Stop 1"*).
+
+### 🌱 3. Your Delivery Impact Dashboard
+- **Features**: Visual eco-impact metrics calculating:
+  1. *Rescue Meals Supported*
+  2. *Group Deliveries Joined*
+  3. *Solitary Delivery Trips Combined*
+  4. *Estimated Food Waste Diverted (kg)*
+- **Accessibility**: Includes a community guest mode so visitors can view platform-wide environmental milestones before signing in.
+
+### ⚙️ 4. Restaurant Surplus & Operations Hub
+- **Features**: Dedicated staff forecasting table with 40+ forecasted dish items, recommended rescue pricing, 1-click publishing modal, and group delivery dispatch route controls.
+- **Convenience**: Includes a 1-click Super Admin login button directly on the access gate for rapid evaluation.
 
 ---
 
-## 🛡️ Security & Role-Based Authorization
+## 🍽️ Culinary Categories & Restaurant Coverage
 
-Security is enforced at the database and HTTP controller level — **never relying only on frontend UI hiding**:
+Every category on BiteFlow is backed by **at least 10 verified restaurants** with dishes:
 
-1. **JWT Authentication**: All protected routes require a valid `Bearer <token>` verified via `authenticateToken` middleware.
-2. **Role Authorization (`requireRole`)**:
-   - `/api/owner/*` requires role `RESTAURANT_OWNER` or `ADMIN`.
-   - `/api/delivery/*` requires role `DELIVERY_PARTNER` or `ADMIN`.
-   - `/api/admin/*` strictly requires role `ADMIN`. Unauthorized attempts receive `403 Forbidden`.
-3. **Restaurant Ownership Validation (`verifyRestaurantOwnership`)**:
-   - A restaurant owner can **only** view, edit, or delete restaurants, categories, and foods they own.
-   - If Owner A attempts `PUT /api/owner/restaurant/25` for a restaurant owned by Owner B, the backend rejects with `403 Forbidden: You do not own this restaurant`.
-4. **Input Sanitization & Validation**:
-   - Password hashing with `bcryptjs` (salt rounds: 10).
-   - Passwords are never sent over API responses or visible in admin tables.
-   - Demo payment mode (`PAYMENT_MODE=demo`) generates secure mock transaction IDs (`TXN_BF_...`) without collecting sensitive CVV/card numbers.
+| Category | Restaurant Count | Signature Cuisines & Offerings |
+| :--- | :---: | :--- |
+| **🍨 Desserts** | **15 Restaurants** | Kulfi, Gulab Jamun, Belgian Waffles, Cheesecakes, Pastries |
+| **🥤 Beverages** | **15 Restaurants** | Filter Coffee, Mango Lassi, Fresh Juices, Milkshakes |
+| **🥢 Chinese** | **12 Restaurants** | Hakka Noodles, Schezwan Fried Rice, Dim Sums, Spring Rolls |
+| **🍛 North Indian** | **12 Restaurants** | Butter Chicken, Paneer Tikka Masala, Dal Makhani, Garlic Naan |
+| **🍚 Biryani** | **11 Restaurants** | Hyderabadi Dum Biryani, Chettinad Biryani, Ambur Mutton Biryani |
+| **🍕 Pizza** | **11 Restaurants** | Neapolitan Pizza, Farmhouse Supreme, Cheese Burst, Peri-Peri |
+| **🍔 Burgers** | **11 Restaurants** | Crispy Chicken Burgers, Veggie Crunch, Gourmet Smash Burgers |
+| **🥞 South Indian** | **11 Restaurants** | Ghee Roast Dosa, Idli Sambar, Medu Vada, Pongal |
 
 ---
 
-## 🚀 Quick Start
+## 🛠️ Technology Stack
+
+| Layer | Technology | Key Details |
+| :--- | :--- | :--- |
+| **Frontend** | React 19, TypeScript, Vite 8 | Fast HMR, component modularity, zero bundle warnings |
+| **Styling** | Vanilla CSS Design System | Curated CSS custom properties, Swiggy/Zomato design language, responsive grids |
+| **Backend** | Node.js, Express.js | REST APIs, modular controllers, JWT authentication |
+| **Real-Time** | Socket.IO v4 | WebSocket rooms for live order dispatching with polling fallback |
+| **Database** | SQLite 3 with WAL Mode | Sub-millisecond queries, normalized relational schema, full transactional integrity |
+| **Security** | bcryptjs, jsonwebtoken, CORS | Role-based middleware, parameter sanitization, ownership barriers |
+
+---
+
+## 💻 Quick Start & Local Setup
 
 ### Prerequisites
-- **Node.js** (v18.0.0 or higher)
-- **npm** (v9.0.0 or higher)
+- **Node.js**: v18.0.0 or higher
+- **npm**: v9.0.0 or higher
 
-### 1. Installation
+### 1. Clone & Install
 ```bash
-# Clone or navigate to the repository
-cd FUTURE_FS_03-main
+git clone https://github.com/SanthoshkumarS2407/BiteFlow-Food-Delivery.git
+cd BiteFlow-Food-Delivery
 
-# Install dependencies (Express, React 19, Socket.IO, SQLite3, Vite)
+# Install dependencies
 npm install
 ```
 
-### 2. Start Application
+### 2. Run Application
 ```bash
-# Option A: Run Full Stack Concurrently (Server on :5000 + Vite on :3000)
+# Option A: Run Full Stack Concurrently (Server on :5000 + Frontend on :3000)
 npm run dev
 
-# Option B: Run Server & Client separately
-npm run dev:server   # Express API + Socket.IO on http://localhost:5000
-npm run dev:client   # Vite Frontend Dev Server on http://localhost:3000
+# Option B: Run Server and Client individually
+npm run dev:server   # Starts Express backend on http://localhost:5000
+npm run dev:client   # Starts Vite frontend on http://localhost:3000
 ```
 
 ### 3. Open in Browser
-- **Frontend App:** [http://localhost:3000](http://localhost:3000)
-- **Backend API Server:** [http://localhost:5000](http://localhost:5000)
+- **Application Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Backend API Server**: [http://localhost:5000](http://localhost:5000)
 
-### 4. Automated Verification Suite
-Run the included end-to-end verification script to validate all 4 roles and security barriers:
+### 4. Build for Production
 ```bash
-node test_e2e_lifecycle.js
+npm run build
 ```
 
 ---
 
-## ⚙️ Environment Configuration (`.env`)
+## 📡 API Endpoints Reference
 
-```env
-# Server
-PORT=5000
-NODE_ENV=development
+### 🔐 Authentication (`/api/auth`)
+- `POST /api/auth/register` — Register a new account (`CUSTOMER`, `RESTAURANT_OWNER`, `DELIVERY_PARTNER`).
+- `POST /api/auth/login` — Authenticate with email/password and obtain JWT.
+- `GET /api/auth/me` — Retrieve active authenticated user profile.
+- `PUT /api/auth/profile` — Update user profile details.
 
-# Database (High-Performance SQLite with WAL Mode)
-DATABASE_PATH=./database.db
+### 👤 Customer Endpoints
+- `GET /api/restaurants` — Search and filter approved restaurants with category matching.
+- `GET /api/restaurants/:id` — Restaurant profile, menu catalog, and customer reviews.
+- `POST /api/orders` — Create order with items, delivery address, and demo payment.
+- `GET /api/orders` — List user's active and past orders.
+- `GET /api/orders/:id` — Real-time tracking data with live driver coordinates and status history.
+- `POST /api/orders/:id/reorder` — Instant reorder of previous meal items.
+- `POST /api/reviews` — Submit ratings and review text for completed orders.
+- `GET /api/addresses` & `POST /api/addresses` — Manage saved customer delivery addresses.
 
-# JWT Authentication
-JWT_SECRET=biteflow_super_secret_key_change_this_2026
-JWT_EXPIRES_IN=7d
+### ♻️ Smart Surplus Rescue & Innovations
+- `GET /api/rescue` — Discover active surplus meals with 40%–50% discount and remaining portions.
+- `GET /api/rescue/prediction/:restaurantId` — Staff demand prediction model and surplus estimates.
+- `GET /api/delivery-groups/available` — Nearby open group delivery windows for ₹0 delivery fee.
+- `GET /api/delivery-groups/:id` — Group tracking screen with sequential stops and privacy preservation.
+- `GET /api/impact` — Environmental impact metrics (diverted meals, combined trips, CO2 savings).
 
-# Frontend & CORS
-CLIENT_URL=http://localhost:5173
-CORS_ORIGINS=http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000,http://localhost:5000
+### 🍽️ Restaurant Owner (`requireOwner`)
+- `GET /api/owner/restaurant` — Retrieve owned restaurant profile.
+- `PUT /api/owner/restaurant/:id/toggle-open` — Toggle kitchen open/closed status.
+- `GET /api/owner/foods/:restaurantId` — Fetch restaurant menu catalog.
+- `POST /api/owner/foods` — Create food item with complete nutritional facts.
+- `GET /api/owner/orders/:restaurantId` — Real-time kitchen order queue.
+- `PUT /api/owner/orders/:id/accept` — Accept incoming order.
+- `PUT /api/owner/orders/:id/prepare` — Advance status to kitchen preparing.
+- `PUT /api/owner/orders/:id/ready` — Mark order ready for courier pickup.
 
-# Payment Gateway Configuration ('demo')
-PAYMENT_MODE=demo
-UPI_ENABLED=true
-GPAY_ENABLED=true
-PHONEPE_ENABLED=true
-PAYTM_ENABLED=true
+### 🛵 Delivery Fleet (`requireDelivery`)
+- `GET /api/delivery/profile` — Driver details, vehicle, rating, and wallet earnings.
+- `PUT /api/delivery/availability` — Toggle Online/Offline courier status.
+- `GET /api/delivery/available-orders` — View pickup-ready orders.
+- `POST /api/delivery/accept/:orderId` — Assign order to courier.
+- `PUT /api/delivery/orders/:orderId/status` — Step through delivery route waypoints (`GOING_TO_RESTAURANT` → `ARRIVED` → `PICKED_UP` → `OUT_FOR_DELIVERY` → `ARRIVED_AT_CUSTOMER` → `DELIVERED`).
 
-# Delivery Fee & Thresholds (in ₹ INR)
-DEFAULT_DELIVERY_FEE=30
-FREE_DELIVERY_MINIMUM=499
-PLATFORM_FEE=5
-
-# Order Boundaries
-MINIMUM_ORDER_AMOUNT=100
-MAXIMUM_ORDER_AMOUNT=10000
-```
-
----
-
-## 📡 API Reference
-
-### 1. Authentication
-- `POST /api/auth/register` — Register new user with role (`CUSTOMER`, `RESTAURANT_OWNER`, `DELIVERY_PARTNER`).
-- `POST /api/auth/login` — Sign in with email and password, receives JWT.
-- `GET /api/auth/me` — Retrieve authenticated user profile and normalized role.
-- `PUT /api/auth/profile` — Update account profile details.
-
-### 2. Customer
-- `GET /api/restaurants` — Filter and search approved restaurants.
-- `GET /api/restaurants/:id` — Restaurant profile, verified menu categories, and reviews.
-- `POST /api/orders` — Place order with items, address, and demo payment.
-- `GET /api/orders` — List user's past and active orders.
-- `GET /api/orders/:id` — Real-time tracking data with driver details and status history.
-- `POST /api/orders/:id/reorder` — Re-adds previous order items directly to cart.
-- `POST /api/reviews` — Submit 5-star ratings and text review for completed order.
-- `GET /api/addresses` & `POST /api/addresses` — Manage saved addresses (Home, Work, Other).
-
-### 3. Restaurant Owner (`requireOwner`)
-- `GET /api/owner/restaurant` — Retrieve owned restaurant details.
-- `POST /api/owner/restaurant` — Register new restaurant (creates in `PENDING_APPROVAL` status).
-- `PUT /api/owner/restaurant/:id` — Update restaurant details (ownership verified).
-- `PUT /api/owner/restaurant/:id/toggle-open` — Toggle kitchen Open / Closed.
-- `GET /api/owner/categories/:restaurantId` — Fetch food categories.
-- `POST /api/owner/categories` & `DELETE /api/owner/categories/:id` — Manage categories.
-- `GET /api/owner/foods/:restaurantId` — Fetch all menu items for owned restaurant.
-- `POST /api/owner/foods` — Create food item with nutrition facts (Calories, Protein, Carbs, Fat, Fiber, Sugar, Sodium, Spicy level).
-- `PUT /api/owner/foods/:id` & `DELETE /api/owner/foods/:id` — Update/delete dish.
-- `PUT /api/owner/foods/:id/toggle` — Enable / disable dish availability.
-- `GET /api/owner/orders/:restaurantId` — Live incoming orders queue.
-- `PUT /api/owner/orders/:id/accept` — Accept order (`PLACED -> CONFIRMED`).
-- `PUT /api/owner/orders/:id/reject` — Reject order with reason (`PLACED -> CANCELLED_BY_RESTAURANT`).
-- `PUT /api/owner/orders/:id/prepare` — Mark preparing (`CONFIRMED -> PREPARING`).
-- `PUT /api/owner/orders/:id/ready` — Mark ready for pickup (`PREPARING -> READY_FOR_PICKUP`).
-
-### 4. Delivery Partner (`requireDelivery`)
-- `GET /api/delivery/profile` — Driver details, vehicle, rating, today's earnings, total deliveries.
-- `PUT /api/delivery/availability` — Toggle Online / Offline status.
-- `GET /api/delivery/available-orders` — Orders ready for pickup awaiting assignment.
-- `POST /api/delivery/accept/:orderId` — Assign order to current partner (`DELIVERY_ASSIGNED`).
-- `GET /api/delivery/active-order` — Current active delivery trip with pickup/drop locations.
-- `PUT /api/delivery/orders/:orderId/status` — Step along route (`GOING_TO_RESTAURANT`, `ARRIVED_AT_RESTAURANT`, `FOOD_PICKED_UP`, `OUT_FOR_DELIVERY`, `ARRIVED_AT_CUSTOMER`, `DELIVERED`).
-- `GET /api/delivery/completed-orders` — History of completed delivery trips.
-
-### 5. Super Admin (`requireAdmin`)
-- `GET /api/admin/stats` — Real-time platform KPI metrics (users by role, orders, revenue, fleet).
-- `GET /api/admin/restaurants` — Full list of all restaurants with owner info.
+### 🛡️ Super Admin (`requireAdmin`)
+- `GET /api/admin/stats` — Real-time platform KPI metrics (users, orders, revenue, fleet).
+- `GET /api/admin/restaurants` — List all restaurants with approval controls.
 - `PUT /api/admin/restaurants/:id/status` — Approve, Reject, or Suspend restaurant.
-- `DELETE /api/admin/restaurants/:id` — Remove restaurant from platform.
-- `GET /api/admin/users?role=X` — View users filtered by role.
-- `PUT /api/admin/users/:id/status` — Activate or Suspend user account.
-- `GET /api/admin/delivery-partners` — View all delivery partner fleet records.
-- `PUT /api/admin/delivery-partners/:id/status` — Approve or deactivate partner.
+- `POST /api/admin/foods` — Add food item across multiple restaurants (**capped at max 10**).
+- `POST /api/admin/foods/:id/assign-restaurants` — Assign dish to restaurants (**capped at max 10**).
+- `PUT /api/admin/users/:id/status` — Activate or suspend user accounts.
+- `GET /api/admin/delivery-partners` — Delivery partner fleet management.
+- `GET /api/admin/analytics/rescue` — Surplus rescue platform analytics.
 
 ---
 
-## 📂 Project Structure
+## 📂 Project Directory Structure
 
 ```
-FUTURE_FS_03-main/
-├── .env                       # Backend and frontend environment variables
+BiteFlow-Food-Delivery/
+├── .env                       # Local environment variables
 ├── .env.example               # Template environment configuration
-├── server.js                  # Main Express backend with Socket.IO, SQLite WAL & RBAC
-├── server_features.js         # Surplus prediction model & Group delivery routing
-├── test_e2e_lifecycle.js      # Automated multi-role end-to-end verification script
-├── database.db                # SQLite database (15 restaurants, 280+ dishes, 4 roles)
-├── package.json               # Node.js dependencies and run scripts
-├── index.html                 # Single page application entry with BiteFlow branding
-├── public/
-│   ├── logo.png               # High-definition BiteFlow brand logo
-│   └── favicon.png            # BiteFlow browser icon
-└── src/
-    ├── App.tsx                # Client router & modal providers
-    ├── main.tsx               # React 19 bootstrap
-    ├── index.css              # Swiggy/Zomato style design system & tokens
-    ├── types.ts               # Complete TypeScript multi-role interface definitions
-    ├── components/
-    │   ├── Navbar.tsx         # Role badge, Deliver To, Search, Hub shortcuts, Cart
-    │   ├── MobileBottomNav.tsx# Role-tailored mobile bottom navigation tabs
-    │   ├── RestaurantCard.tsx # Swiggy-style cards with discount ribbons & rating pills
-    │   ├── FoodCard.tsx       # Food cards with dual action (Add + instant Order Now)
-    │   ├── LocationModal.tsx  # GPS & address selection modal
-    │   └── ...
-    └── pages/
-        ├── Auth.tsx           # Multi-role register & 1-Click demo logins for all 4 roles
-        ├── Home.tsx           # "What's on your mind?", Quick filters, and Restaurant list
-        ├── RestaurantDetail.tsx # Menu categories, nutrition breakdown, and floating cart
-        ├── RestaurantOwnerDashboard.tsx # Complete Owner Portal (Onboarding, Menu, Orders)
-        ├── DeliveryPartnerDashboard.tsx # Courier Portal (Online toggle, Active trip, Wallet)
-        ├── Admin.tsx          # Super Admin Operations Hub (KPIs, Approvals, Users)
-        ├── OrderTracking.tsx  # Live 6-stage tracker with Socket.IO, map & review modal
-        ├── CartPage.tsx       # Cart with Free Delivery progress bar & bill breakdown
-        ├── Checkout.tsx       # Indian UPI (GPay/PhonePe/Paytm), Card, and COD gateway
-        ├── SmartCombos.tsx    # Interactive Smart Combo Builder
-        ├── HealthFood.tsx     # Nutrition & health-filtered catalog
-        └── RescueHub.tsx      # Smart Surplus Food Rescue Hub
+├── .gitignore                 # Excluded directories, temporary files & SQLite journals
+├── database.db                # SQLite database with 15+ restaurants, 300+ dishes, and demo groups
+├── index.html                 # Main entry point with title: 'BiteFlow — Food Delivery'
+├── package.json               # Project manifest, dependencies, and NPM scripts
+├── package-lock.json          # Dependency lockfile
+├── seed_indian_data.js        # Comprehensive multi-restaurant and menu seeder
+├── server.js                  # Express backend with Socket.IO, RBAC, and SQLite WAL engine
+├── server_features.js         # Surplus rescue engine, group route batching, and analytics
+├── test_e2e_lifecycle.js      # E2E lifecycle and role security test suite
+├── tsconfig.json              # TypeScript root configuration
+├── tsconfig.node.json         # Node-specific TypeScript config
+├── vite.config.ts             # Vite bundler configuration with backend proxy
+├── public/                    # Static public assets
+│   ├── favicon.png            # BiteFlow browser icon
+│   └── logo.png               # High-resolution brand logo
+└── src/                       # Frontend source application
+    ├── App.tsx                # Page router and modal coordinator
+    ├── index.css              # Design system tokens, utilities, and components
+    ├── main.tsx               # React 19 entry point
+    ├── types.ts               # TypeScript interfaces and type contracts
+    ├── components/            # Reusable UI components
+    │   ├── AdminGroupDeliveryTab.tsx # Group delivery route controls & analytics
+    │   ├── AdminRescueTab.tsx        # Staff forecast table & surplus listing creator
+    │   ├── DeliveryTrackingMap.tsx   # Live GPS route map
+    │   ├── DemoScenariosBar.tsx      # Quick role-switching bar
+    │   ├── DirectOrderModal.tsx      # Instant 1-click ordering modal
+    │   ├── FoodCard.tsx              # Interactive food card with veg/non-veg tags
+    │   ├── FoodDetailModal.tsx       # Nutritional breakdown & customizer modal
+    │   ├── LocationModal.tsx         # Address and GPS picker
+    │   ├── MobileBottomNav.tsx       # Responsive mobile navigation
+    │   ├── Navbar.tsx                # Main header with role badge, search, and innovations menu
+    │   ├── RescueFoodSection.tsx     # Homepage surplus rescue carousel
+    │   ├── RestaurantCard.tsx        # Restaurant card with discount badges & ETA
+    │   └── SmartComboSection.tsx     # AI-curated smart combo suggestions
+    ├── contexts/              # Global state management
+    │   ├── AppContext.tsx            # Auth, cart, location, and navigation provider
+    │   └── ToastContext.tsx          # Toast notification system
+    ├── data/                  # Static fallback data
+    │   └── fallbackRestaurants.ts    # Fallback catalog with 10+ restaurants per category
+    └── pages/                 # Full-screen page views
+        ├── Admin.tsx                 # Super Admin platform dashboard
+        ├── Auth.tsx                  # Sign In / Register with 1-click demo logins
+        ├── CartPage.tsx              # Cart review, delivery progress bar & bill breakdown
+        ├── Checkout.tsx              # Indian payment gateway (UPI, Card, COD)
+        ├── DeliveryPartnerDashboard.tsx # Courier delivery portal
+        ├── Favorites.tsx             # Saved favourite dishes & restaurants
+        ├── GroupDeliveryTracking.tsx # Real-time group delivery tracking with stops
+        ├── Home.tsx                  # Homepage with "What's on your mind?" category slider
+        ├── Offers.tsx                # Deals, coupons, and discounts hub
+        ├── OrderHistory.tsx          # Order receipt history and invoice review
+        ├── OrderTracking.tsx         # Live Socket.IO customer order tracker
+        ├── Profile.tsx               # Account settings and Delivery Impact Dashboard
+        ├── RescueHub.tsx             # Smart Surplus Food Rescue Hub
+        ├── RestaurantDetail.tsx      # Restaurant menu categories & nutritional facts
+        ├── RestaurantOwnerDashboard.tsx # Restaurant owner portal
+        ├── Restaurants.tsx           # Filterable restaurant catalog
+        └── SearchPage.tsx            # Live search across dishes and restaurants
 ```
 
 ---
 
 ## 📄 License
-This project is open-source and intended for educational and enterprise portfolio demonstrations.
+This project is open-source under the **MIT License**.
 
 © 2026 **BiteFlow Technologies**. All rights reserved.
